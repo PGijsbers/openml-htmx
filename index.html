@@ -4,20 +4,25 @@
     <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
 </meta>
 <head>
-<title>Page Title</title>
+<title>OpenML HTMX</title>
 </head>
 <body>
 
-<h1>This is a Heading</h1>
-<p>This is a paragrsaph.</p>
-<div hx-get="www.openml.org/example">Get Some HTML</div>
-<div style="background:blue;color:white;">hello</div>
-<button hx-get="http://localhost:8000/blue"
-    hx-trigger="click"
-    hx-swap="outerHTML"
->
-    Click Me!
-</button>
+<h1>Datasets</h1>
+<p>Experimental page exploring OpenML with HTMX</p>
+<div
+        hx-get="http://localhost:8000/blue"
+        hx-trigger="revealed"
+        hx-swap="outerHTML"
+>This element will replace itself with the latest results.</div>
+<!--<div hx-get="www.openml.org/example">Get Some HTML</div>-->
+<!--<div style="background:blue;color:white;">hello</div>-->
+<!--<button hx-get="http://localhost:8000/blue"-->
+<!--    hx-trigger="click"-->
+<!--    hx-swap="outerHTML"-->
+<!--&gt;-->
+<!--    Click Me!-->
+<!--</button>-->
 
 </body>
 </html>
