@@ -6,7 +6,8 @@ def get_datasets(offset: int, limit: int):
     response = httpx.post(
         f"{OPENML_URL}/datasets/list",
         json={"pagination": {"offset": offset, "limit": limit},
-              "apikey": "00000000000000000000000000000000"}
+              "apikey": "00000000000000000000000000000000",
+              "status": "active"}
     )
     return response.json()
 
