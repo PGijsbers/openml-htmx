@@ -10,8 +10,9 @@
 
 <h1>Datasets</h1>
 <p>Experimental page exploring OpenML with HTMX</p>
+<!-- by trial and error found that only about 5520 datasets are active -->
 <div
-        hx-get="http://localhost:8000/blue"
+        hx-get="http://localhost:8000/datasets/offset/0/limit/10"
         hx-trigger="revealed"
         hx-swap="outerHTML"
 >This element will replace itself with the latest results.</div>

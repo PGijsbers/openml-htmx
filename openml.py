@@ -2,10 +2,11 @@ import httpx
 
 OPENML_URL = "https://test.openml.org/py"
 
-def get_datasets():
+def get_datasets(offset: int, limit: int):
     response = httpx.post(
         f"{OPENML_URL}/datasets/list",
-        json={"pagination": {"offset": 10, "limit": 5}}
+        json={"pagination": {"offset": offset, "limit": limit},
+              "apikey": "00000000000000000000000000000000"}
     )
     return response.json()
 
