@@ -10,12 +10,14 @@
 
 <h1>Datasets</h1>
 <p>Experimental page exploring OpenML with HTMX</p>
+<div class="dataset-list">
 <!-- by trial and error found that only about 5520 datasets are active -->
 <div
         hx-get="http://localhost:8000/datasets/last/10"
         hx-trigger="revealed"
         hx-swap="outerHTML"
 >This element will replace itself with the latest results.</div>
+</div>
 <!--<div hx-get="www.openml.org/example">Get Some HTML</div>-->
 <!--<div style="background:blue;color:white;">hello</div>-->
 <!--<button hx-get="http://localhost:8000/blue"-->

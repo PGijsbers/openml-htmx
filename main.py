@@ -48,7 +48,20 @@ def get_dataset_items(offset: int, limit: int, forward: bool = False):
         ) for dataset in (datasets if forward else reversed(datasets))
     ]
     new_offset = offset + limit if forward else offset - limit
-    with open("html/replace-on-reveal.html", "r") as fh:
-        ror_template = Template(fh.read())
-    next_ = ror_template.substitute(endpoint=f"http://localhost:8000/datasets/offset/{new_offset}/limit/{limit}")
-    return ''.join(items + [next_])
+
+    # This infinite scroll loads nicely and typically in time as it is presented before
+    # the latest results. However, on very fast scrolling, the revealed trigger may be
+    # missed. In that case no further results are loaded, unless you scroll back up
+    # to get a revealed trigger. This is something I can live with for now, but may
+    # be circumvented by placing a back-up reveal trigger at the bottom. There should
+    # be caution to remove that trigger on a successful load of the leading trigger.
+    
+    next_ = '''<div
+            hx-get="$endpoint"
+            hx-trigger="revealed"
+            hx-swap="afterend"
+            hx-target=".dataset-list div:last-child"
+            title="Loading $endpoint">loader</div>'''.replace(
+        "$endpoint",f"http://localhost:8000/datasets/offset/{new_offset}/limit/{limit}"
+    )
+    return ''.join([next_] + items)
