@@ -4,6 +4,7 @@
  font-family: system-ui, sans-serif;
 }
 
+
 .centered-column {
     padding-left: 20%;
     padding-right: 20%;
@@ -42,4 +43,14 @@
  border-bottom-width: 2px;
  border-style: solid;
  border-color: #4cb458;
+ background:#f4f7f2;
+}
+
+.markdown p {
+ padding-bottom: .5em;
+}
+
+.markdown h3 {
+ padding-top: .5em;
+ padding-bottom: .5em;
 }

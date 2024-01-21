@@ -93,6 +93,8 @@ def get_dataset_items(offset: int, limit: int, forward: bool = True):
 @app.get("/datasets/{id_}", response_class=HTMLResponse)
 def dataset_card(id_: int):
     dataset = get_dataset(id_)
+    if dataset["description"] == "":
+        dataset["description"] = "No description provided."
     dataset["description"] = markdown.markdown(dataset["description"])
 
     with open("html/dataset-card.html", "r") as fh:
@@ -101,3 +103,5 @@ def dataset_card(id_: int):
         **dataset,
         openml_url=f"https://openml.org/d/{id_}",
     )
+
+

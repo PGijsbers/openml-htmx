@@ -1,8 +1,8 @@
-<div hx-trigger="click" hx-get="$endpoint" hx-swap="outerHTML" class="dataset-list-item">
+<div hx-trigger="click" hx-get="$endpoint" hx-swap="outerHTML" hx-target="find .dataset-list-item-body" class="dataset-list-item">
     <div class="dataset-list-item-header">
         <div style="display:flex;justify-content:end;align-items:center;margin:10px;">
             <div style="margin-right:auto;display:flex;flex-direction:column;">
-                <p style="font-weight:bold;">$name</p>
+                <strong>$name</strong>
                 <p>id: <a href="https://openml.org/d/$id">$id</a></p>
             </div>
             <div style="display:flex;flex-direction:column;">
