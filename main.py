@@ -1,5 +1,6 @@
 import markdown
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from string import Template
 
@@ -7,6 +8,7 @@ from openml import get_datasets, get_dataset
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/", response_class=HTMLResponse)
