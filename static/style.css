@@ -1,4 +1,7 @@
-body {
+* {
+ margin: 0;
+ padding: 0;
+ font-family: system-ui, sans-serif;
 }
 
 .centered-column {
@@ -16,12 +19,27 @@ body {
     flex-direction:column;
     gap: 1em;
 }
-
+/*
 .dataset-list-item {
     border: 1px solid green;
     border-radius: 3px;
     box-shadow: 0px 2px 2px green;
-}
+}*/
 .dataset-list-item:hover{
   background:#e8f0e4;
+}
+
+.dataset-list-item-header {
+    background: #4cb458; /* 4cb458 */
+    color: black;
+    border-radius: 5px 5px 0px 0px;
+    padding: 0.2em;
+}
+
+.dataset-list-item-body {
+ border-right-width: 2px;
+ border-left-width: 2px;
+ border-bottom-width: 2px;
+ border-style: solid;
+ border-color: #4cb458;
 }

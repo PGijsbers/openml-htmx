@@ -27,7 +27,17 @@ def get_last_datasets(number: int):
         assert offset >= 0
 
     offset = offset + len(datasets) - 20
-    return get_dataset_items(offset, 20)
+    offset=0
+    return get_dataset_items(offset, 20, forward=True)
+
+def round_to_suffix(number: int) -> str:
+    if number < 1000:
+        return f"{number:.3g}"
+    if number < 1_000_000:
+        return f"{number / 1_000:.3g}K"
+    if number < 1_000_000_000:
+        return f"{number / 1_000_000:.3g}M"
+    return f"{number / 1_000_000_000:.3g}B"
 
 @app.get("/datasets/offset/{offset}/limit/{limit}", response_class=HTMLResponse)
 def get_dataset_items(offset: int, limit: int, forward: bool = False):
@@ -38,15 +48,26 @@ def get_dataset_items(offset: int, limit: int, forward: bool = False):
             for q in dataset["quality"]
         )
 
+        task_type = dataset["quality"].get("NumberOfClasses", "?")
+        dataset["task_type"] = {0: "regression", 2: "binary classification", "?": "No default target"}.get(
+            task_type, "multi-class classification"
+        )
+        if isinstance(rows := dataset["quality"].get("NumberOfInstances", "?"), (int, float)):
+            rows = round_to_suffix(rows)
+        dataset["rows"] = rows
+
+        if isinstance(features := dataset["quality"].get("NumberOfFeatures", "?"), (int, float)):
+            features = round_to_suffix(features)
+        dataset["features"] = features
     with open("html/dataset-list-item.html", "r") as fh:
         template = Template(fh.read())
 
     items = [template.substitute(
         id=dataset["did"],
         name=dataset["name"],
-        rows=dataset["quality"].get("NumberOfInstances", "?"),
-        features=dataset["quality"].get("NumberOfFeatures", "?"),
-        classes=dataset["quality"].get("NumberOfClasses", "?"),
+        rows=dataset["rows"],
+        features=dataset["features"],
+        classes=dataset["task_type"],
         endpoint=f"http://localhost:8000/datasets/{dataset['did']}",
         ) for dataset in (datasets if forward else reversed(datasets))
     ]
@@ -61,10 +82,9 @@ def get_dataset_items(offset: int, limit: int, forward: bool = False):
 
     next_ = '''<div
             hx-get="$endpoint"
-            hx-trigger="revealed"
             hx-swap="afterend"
             hx-target=".dataset-list div:last-child"
-            title="Loading $endpoint">loader</div>'''.replace(
+            title="Loading $endpoint"></div>'''.replace(
         "$endpoint",f"http://localhost:8000/datasets/offset/{new_offset}/limit/{limit}"
     )
     return ''.join([next_] + items)

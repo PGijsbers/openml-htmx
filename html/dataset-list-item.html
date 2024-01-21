@@ -1,4 +1,15 @@
 <div hx-trigger="click" hx-get="$endpoint" hx-swap="outerHTML" class="dataset-list-item">
-    <h2 class="dataset-list-item-header">$id $name</h2>
-    <p class="dataset-list-item-body">$rows $features $classes</p>
+    <div class="dataset-list-item-header">
+        <div style="display:flex;justify-content:end;align-items:center;margin:10px;">
+            <div style="margin-right:auto;display:flex;flex-direction:column;">
+                <p style="font-weight:bold;">$name</p>
+                <p>id: <a href="https://openml.org/d/$id">$id</a></p>
+            </div>
+            <div style="display:flex;flex-direction:column;">
+                <p style="text-align:right;" title="Dataset dimensions ($rows rows and $features columns)">$rows x $features</p>
+                <p style="text-align:right;" title="Proposed task type based on the dataset's default target attribute">$classes</p>
+            </div>
+        </div>
+    </div>
+    <p class="dataset-list-item-body" style="text-align:center;">v</p>
 </div>
