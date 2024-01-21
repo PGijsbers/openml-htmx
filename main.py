@@ -45,6 +45,7 @@ def get_dataset_items(offset: int, limit: int, forward: bool = False):
         rows=dataset["quality"].get("NumberOfInstances", "?"),
         features=dataset["quality"].get("NumberOfFeatures", "?"),
         classes=dataset["quality"].get("NumberOfClasses", "?"),
+        endpoint=f"http://localhost:8000/datasets/{dataset['did']}",
         ) for dataset in (datasets if forward else reversed(datasets))
     ]
     new_offset = offset + limit if forward else offset - limit
@@ -55,7 +56,7 @@ def get_dataset_items(offset: int, limit: int, forward: bool = False):
     # to get a revealed trigger. This is something I can live with for now, but may
     # be circumvented by placing a back-up reveal trigger at the bottom. There should
     # be caution to remove that trigger on a successful load of the leading trigger.
-    
+
     next_ = '''<div
             hx-get="$endpoint"
             hx-trigger="revealed"
@@ -65,3 +66,15 @@ def get_dataset_items(offset: int, limit: int, forward: bool = False):
         "$endpoint",f"http://localhost:8000/datasets/offset/{new_offset}/limit/{limit}"
     )
     return ''.join([next_] + items)
+
+@app.get("/datasets/{id_}", response_class=HTMLResponse)
+def dataset_card(id_: int):
+    dataset = get_dataset(id_)
+    dataset["description"] = markdown.markdown(dataset["description"])
+
+    with open("html/dataset-card.html", "r") as fh:
+        template = Template(fh.read())
+    return template.substitute(
+        **dataset,
+        openml_url=f"https://openml.org/d/{id_}",
+    )
