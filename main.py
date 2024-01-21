@@ -40,7 +40,7 @@ def round_to_suffix(number: int) -> str:
     return f"{number / 1_000_000_000:.3g}B"
 
 @app.get("/datasets/offset/{offset}/limit/{limit}", response_class=HTMLResponse)
-def get_dataset_items(offset: int, limit: int, forward: bool = False):
+def get_dataset_items(offset: int, limit: int, forward: bool = True):
     datasets = get_datasets(offset, limit)
     for dataset in datasets:
         dataset["quality"] = dict(
@@ -82,8 +82,9 @@ def get_dataset_items(offset: int, limit: int, forward: bool = False):
 
     next_ = '''<div
             hx-get="$endpoint"
+            hx-trigger="revealed"
             hx-swap="afterend"
-            hx-target=".dataset-list div:last-child"
+            hx-target=".dataset-list > div:last-child"
             title="Loading $endpoint"></div>'''.replace(
         "$endpoint",f"http://localhost:8000/datasets/offset/{new_offset}/limit/{limit}"
     )
