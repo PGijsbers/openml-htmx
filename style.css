@@ -1,0 +1,14 @@
+body {
+    background: blue;
+}
+
+.centered-column {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+@media (max-width: 800px) {
+    .centered-column {
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+}
