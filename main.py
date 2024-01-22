@@ -7,7 +7,7 @@ from string import Template
 from openml import get_datasets, get_dataset
 
 SUFFIX = "/htmx"
-HOST = "http://test.openml.org"
+HOST = "https://test.openml.org"
 HTMX_URL = f"{HOST}{SUFFIX}"
 
 app = FastAPI(root_path=SUFFIX)
