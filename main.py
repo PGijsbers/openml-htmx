@@ -6,7 +6,11 @@ from string import Template
 
 from openml import get_datasets, get_dataset
 
-app = FastAPI()
+SUFFIX = "/htmx"
+HOST = "test.openml.org"
+HTMX_URL = f"{HOST}{SUFFIX}"
+
+app = FastAPI(root_path=SUFFIX)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -14,12 +18,13 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("/", response_class=HTMLResponse)
 def get_home():
     with open("index.html", "r") as f:
-        return f.read()
+        return Template(f.read()).substitute(HTMX_URL=HTMX_URL)
 
 
 @app.get("/datasets/last/{number}", response_class=HTMLResponse)
 def get_last_datasets(number: int):
     # There no other way to figure out the offset for the listing
+    return get_dataset_items(0, 20, forward=True)
     offset = 6000
     limit = 100
     while (datasets := get_datasets(offset, limit)) and isinstance(datasets, dict):
@@ -68,7 +73,7 @@ def get_dataset_items(offset: int, limit: int, forward: bool = True):
         rows=dataset["rows"],
         features=dataset["features"],
         classes=dataset["task_type"],
-        endpoint=f"http://localhost:8000/datasets/{dataset['did']}",
+        endpoint=f"{HTMX_URL}/datasets/{dataset['did']}",
         ) for dataset in (datasets if forward else reversed(datasets))
     ]
     new_offset = offset + limit if forward else offset - limit
@@ -86,7 +91,7 @@ def get_dataset_items(offset: int, limit: int, forward: bool = True):
             hx-swap="afterend"
             hx-target=".dataset-list > div:last-child"
             title="Loading $endpoint"></div>'''.replace(
-        "$endpoint",f"http://localhost:8000/datasets/offset/{new_offset}/limit/{limit}"
+        "$endpoint",f"{HTMX_URL}/offset/{new_offset}/limit/{limit}"
     )
     return ''.join([next_] + items)
 

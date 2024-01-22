@@ -16,7 +16,7 @@
 <div class="dataset-list">
 <!-- by trial and error found that only about 5520 datasets are active -->
 <div
-        hx-get="http://localhost:8000/datasets/last/10"
+        hx-get="$HTMX_URL/datasets/last/10"
         hx-trigger="revealed"
         hx-swap="outerHTML"
 >This element will replace itself with the latest results.</div>
