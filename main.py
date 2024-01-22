@@ -7,7 +7,7 @@ from string import Template
 from openml import get_datasets, get_dataset
 
 SUFFIX = "/htmx"
-HOST = "test.openml.org"
+HOST = "http://test.openml.org"
 HTMX_URL = f"{HOST}{SUFFIX}"
 
 app = FastAPI(root_path=SUFFIX)
@@ -18,7 +18,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("/", response_class=HTMLResponse)
 def get_home():
     with open("index.html", "r") as f:
-        return Template(f.read()).substitute(HTMX_URL=HTMX_URL)
+        return Template(
+		f.read()
+	).substitute(HTMX_URL=HTMX_URL, stylesheet=f"{HTMX_URL}{SUFFIX}/static/style.css")
 
 
 @app.get("/datasets/last/{number}", response_class=HTMLResponse)
@@ -91,7 +93,7 @@ def get_dataset_items(offset: int, limit: int, forward: bool = True):
             hx-swap="afterend"
             hx-target=".dataset-list > div:last-child"
             title="Loading $endpoint"></div>'''.replace(
-        "$endpoint",f"{HTMX_URL}/offset/{new_offset}/limit/{limit}"
+        "$endpoint",f"{HTMX_URL}/datasets/offset/{new_offset}/limit/{limit}"
     )
     return ''.join([next_] + items)
 
