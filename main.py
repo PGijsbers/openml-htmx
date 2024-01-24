@@ -22,6 +22,9 @@ def get_home():
 		f.read()
 	).substitute(HTMX_URL=HTMX_URL, stylesheet=f"{HTMX_URL}{SUFFIX}/static/style.css")
 
+@app.get("/study/{name}", response_class=HTMLResponse)
+def get_study(name: str):
+    return f"<div>{name} datasets</div>"
 
 @app.get("/datasets/last/{number}", response_class=HTMLResponse)
 def get_last_datasets(number: int):
