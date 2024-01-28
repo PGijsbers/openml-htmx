@@ -16,3 +16,9 @@ def get_dataset(id_: int):
         f"{OPENML_URL}/datasets/{id_}"
     )
     return r.json()
+
+def get_study(id_or_alias: int | str):
+    r = httpx.get(
+        f"{OPENML_URL}/studies/{id_or_alias}"
+    )
+    return r.json()

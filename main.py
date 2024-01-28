@@ -4,10 +4,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from string import Template
 
-from openml import get_datasets, get_dataset
+from openml import get_datasets, get_dataset, get_study
 
 SUFFIX = "/htmx"
 HOST = "https://test.openml.org"
+SUFFIX, HOST = "", "http://localhost:8000"
 HTMX_URL = f"{HOST}{SUFFIX}"
 
 app = FastAPI(root_path=SUFFIX)
@@ -23,8 +24,12 @@ def get_home():
 	).substitute(HTMX_URL=HTMX_URL, stylesheet=f"{HTMX_URL}{SUFFIX}/static/style.css")
 
 @app.get("/study/{name}", response_class=HTMLResponse)
-def get_study(name: str):
-    return f"<div>{name} datasets</div>"
+def show_study(name: str):
+    # 315/317/318
+    alias = {"amlb": 271, "ctr": 353, "meta-album": 315, "cc18": 99}
+    study = get_study(alias[name])
+    description = markdown.markdown(study['description'])
+    return description
 
 @app.get("/datasets/last/{number}", response_class=HTMLResponse)
 def get_last_datasets(number: int):
